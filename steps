@@ -4,3 +4,4 @@
   - Compute length of each of them. One length is number of rows, the other is number of columns
   - Given number of rows and columns, construct matrix with basic score: (+1 for match, -1 for gap/mismatch)
 
+Output matrix as a separate text file or TSV 
