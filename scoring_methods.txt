@@ -20,5 +20,8 @@
     where O is opening penalty, E is extension penalty and k is length of gap
 
 4) Complex scoring using scoring matrices:
-
     
+    Scoring matrices compute log-ratios of aminoacid substitution. They are constructed aligning multiple protein sequences
+    and assigning a score based on the ratio of the observed mutation frecuency vs the probability of the mutation of appearing
+    out of chance. The ratio is then applied a log conversion: positive scores indicate a more frequent mutation, whereas negative
+    ones correspond to rare substitutions.
