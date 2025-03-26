@@ -1,0 +1,24 @@
+1) Basic binary scoring: 
+    +1 for match
+    0 for mismatch
+    -1 for gap
+
+2) More stringent binary scoring:
+
+    +1 for match
+    -1 for mismatch
+    -1 for gap
+
+3) Binary scoring w/linear gap penalty function:
+
+    +1 for match
+    -1 for mismatch
+    - g for gap with
+        
+        g = O + E(k-1)
+
+    where O is opening penalty, E is extension penalty and k is length of gap
+
+4) Complex scoring using scoring matrices:
+
+    
