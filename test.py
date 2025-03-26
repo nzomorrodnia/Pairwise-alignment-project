@@ -13,12 +13,21 @@ def compare(input1, input2):
         return "Please input a valid sequence"
   
   # Calculating length and building matrix
-  i = len(input1)
-  j = len(input2)
+  alignment_matrix = []
+  for i in sequences[1]:
+    row = []
+    for j in sequences[0]:
+      elem = 0
+      if i==j:
+        elem+=1
+      row.append(elem)
+    alignment_matrix.append(row)
   
+  return alignment_matrix
 
   
-print(compare('AG1CCA','AGGACT'))
+for row in (compare('AGCCA','AGGACT')):
+  print(row)
 
 
 
