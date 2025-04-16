@@ -2,19 +2,7 @@ MATCH = 1
 MISMATCH = -1
 GAP = -1
 
-# def print_matrix(matrix, seq1, seq2):
-#     print("_  _  " + '  '.join(list(seq1)))
-#     for i in range(len(matrix[0])):
-#         row = (seq2[i-1] if i > 0 else "_") + " "
-#         for j in range(len(matrix)):
-#             str_num = str(matrix[j][i])
-#             if len(str_num) > 1:
-#                 row += str_num
-#             else:
-#                 row += " "
-#                 row += str_num
-#             row += " "
-#         print(row)
+from score_matrix import score
 
 def init_sides(matrix):
     for i in range(1, len(matrix)):
@@ -27,7 +15,7 @@ def rev(seq1, seq2):
     l_seq2 = list(seq2)
     l_seq1.reverse()
     l_seq2.reverse()
-    return ''.join(l_seq1), ''.join(l_seq2)
+    return ''.join(l_seq1) + '\n' + ''.join(l_seq2)
 
 def traceback(matrix, seq1, seq2):
     aligned_seq1 = ""
@@ -36,8 +24,7 @@ def traceback(matrix, seq1, seq2):
     i = len(seq1)
     j = len(seq2)
     while i > 0 or j > 0:
-        score = MATCH if seq1[i-1] == seq2[j-1] else MISMATCH
-        if (i > 0 and j > 0) and matrix[i][j] == matrix[i-1][j-1] + score:
+        if (i > 0 and j > 0) and matrix[i][j] == (matrix[i-1][j-1] + score(i,j,seq1,seq2)):
             aligned_seq1 += seq1[i-1]
             aligned_seq2 += seq2[j-1]
             i -= 1
@@ -51,8 +38,7 @@ def traceback(matrix, seq1, seq2):
             aligned_seq2 += seq2[j-1]
             j -= 1
 
-
-    return rev(aligned_seq1, aligned_seq2)
+    return rev(aligned_seq2, aligned_seq1)
 
 def needleman_wunsch(seq1, seq2):
     score_matrix = [[0 for _ in range(len(seq2) + 1)] for _ in range(len(seq1) + 1)]
@@ -60,8 +46,7 @@ def needleman_wunsch(seq1, seq2):
 
     for i in range(1, len(seq1) + 1):
         for j in range(1, len(seq2) + 1):
-            score = MATCH if seq1[i-1] == seq2[j-1] else MISMATCH
-            score_matrix[i][j] = max(score_matrix[i-1][j-1] + score, score_matrix[i-1][j] + GAP, score_matrix[i][j-1] + GAP)
+            score_matrix[i][j] = max(score_matrix[i-1][j-1] + score(i,j,seq1,seq2),score_matrix[i][j-1] + GAP, score_matrix[i-1][j] + GAP)
     for row in score_matrix:
         print(row)
     return traceback(score_matrix, seq1, seq2)
@@ -76,7 +61,7 @@ print(needleman_wunsch("AGCCA", "AGGACT"))
 # +-+-+- = 0
 # AGGACT
 
-print(needleman_wunsch("GCATGCG", "GATTACA"))
+print(needleman_wunsch("GATTACA","GCATGCG"))
 # GCATG-CG
 # +-++--+- = 0
 # G-ATTACA
@@ -90,14 +75,14 @@ print(needleman_wunsch("ATTGC", "AGGC"))
 # +--++ = 1
 # A-GGC
 
-ins1 = "ATGGCCTTCTGGCTCCAAGCTGCATCTCTGCTGGTGTTGCTGGCGCTCTCCCCCGGGGTAGATGCTGCAGC" \
-"TGCCCAGCACCTGTGTGGCTCTCACCTGGTGGACGCCCTCTATCTGGTGTGTGGAGAGAAAGGATTCTTTTACACCCCAAAGAGAGATGT" \
-"GGATCCCCTTATAGGGTTCCTCTCTCCAAAATCAGCAAAGGAGAACGAAGAGTACCCCTTCAAAGACCAGACGGAGATGATGGTAAAGAGAGGTATTGTAGA" \
-"GCAGTGCTGTCACAAGCCCTGCAACATCTTCGACCTGCAAAACTACTGCAACTGA"
+# ins1 = "ATGGCCTTCTGGCTCCAAGCTGCATCTCTGCTGGTGTTGCTGGCGCTCTCCCCCGGGGTAGATGCTGCAGC" \
+# # "TGCCCAGCACCTGTGTGGCTCTCACCTGGTGGACGCCCTCTATCTGGTGTGTGGAGAGAAAGGATTCTTTTACACCCCAAAGAGAGATGT" \
+# # "GGATCCCCTTATAGGGTTCCTCTCTCCAAAATCAGCAAAGGAGAACGAAGAGTACCCCTTCAAAGACCAGACGGAGATGATGGTAAAGAGAGGTATTGTAGA" \
+# # "GCAGTGCTGTCACAAGCCCTGCAACATCTTCGACCTGCAAAACTACTGCAACTGA"
 
-ins2 = "ATGGCCCTGTGGATGCACCTCCTGCCCCTGCTGGCGCTGCTGGCCCTCTGGGGACCCGAGCCAGC" \
-"CCCGGCCTTTGTGAACCAGCACCTGTGCGGCCCCCACCTGGTGGAAGCCCTCTACCTGGTGTGCGGGGAGCGAGGTT" \
-"TCTTCTACGCACCCAAGACCCGCCGGGAGGCGGAGGACCTGCAGGTGGGGCAGGTGGAGCTGGGTGGGGGCTCTATCACGG" \
-"GCAGCCTGCCACCCTTGGAGGGTCCCATGCAGAAGCGTGGCGTCGTGGATCAGTGCTGCACCAGCATCTGCTCCCTCTACCAGCTGCAGAACTACTGCAACTAG"
+# ins2 = "ATGGCCCTGTGGATGCACCTCCTGCCCCTGCTGGCGCTGCTGGCCCTCTGGGGACCCGAGCCAGC" \
+# # "CCCGGCCTTTGTGAACCAGCACCTGTGCGGCCCCCACCTGGTGGAAGCCCTCTACCTGGTGTGCGGGGAGCGAGGTT" \
+# # "TCTTCTACGCACCCAAGACCCGCCGGGAGGCGGAGGACCTGCAGGTGGGGCAGGTGGAGCTGGGTGGGGGCTCTATCACGG" \
+# # "GCAGCCTGCCACCCTTGGAGGGTCCCATGCAGAAGCGTGGCGTCGTGGATCAGTGCTGCACCAGCATCTGCTCCCTCTACCAGCTGCAGAACTACTGCAACTAG"
 
 # print(needleman_wunsch(ins1,ins2))

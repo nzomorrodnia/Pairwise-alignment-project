@@ -5,3 +5,14 @@
   - Given number of rows and columns, construct matrix with basic score: (+1 for match, -1 for gap/mismatch)
 
 Output matrix as a separate text file or TSV 
+
+# TO DO:
+
+- Implement two different operation modes (DNA, protein)
+  - For DNA mode, add a Kimura-like matrix
+- Input as a FASTA file
+  - Input control and exception handling
+- What happens in case of branching?
+- Maybe let the user decide the score parameters?
+
+- !Affinity gap!
