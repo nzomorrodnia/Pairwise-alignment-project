@@ -12,7 +12,7 @@ Output matrix as a separate text file or TSV
   - For DNA mode, add a Kimura-like matrix
 - Input as a FASTA file
   - Input control and exception handling
-- What happens in case of branching?
+- What happens in case of branching? (DONE, but overcomplicates the algorithm too much)
 - Maybe let the user decide the score parameters?
 
-- !Affinity gap!
+- !Affinity gap! (DONE)

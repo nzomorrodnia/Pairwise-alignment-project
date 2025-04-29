@@ -30,7 +30,7 @@ def traceback(seq1, seq2, score_matrix, seq1_gaps_matrix, seq2_gaps_matrix):
             aligned_seq2 += "-"
             i -= 1
 
-        else:
+        elif i > 0 and score_matrix[i][j] == seq2_gaps_matrix[i][j]:
             aligned_seq1 += "-"
             aligned_seq2 += seq2[j - 1]
             j -= 1
