@@ -65,6 +65,6 @@ def needleman_wunsch(seq1, seq2):
     return traceback(seq1, seq2, score_matrix, P, Q)
 
 # print(needleman_wunsch("CATGCATCGAC", "GCATGCCAT"))
-print(needleman_wunsch("GATTACA", "GCATGCG"))
+print(needleman_wunsch("CG", "CCGA"))
 
 
