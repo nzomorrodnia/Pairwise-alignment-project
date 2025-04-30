@@ -1,6 +1,4 @@
 import blosum as bl
-import pandas as pd
-
 
 def score(i,j,seq1,seq2):
     '''Calculates the BLOSUM62 score for substitution in i,j'''    

@@ -30,7 +30,7 @@ def traceback(seq1, seq2, score_matrix, seq1_gaps_matrix, seq2_gaps_matrix):
             aligned_seq2 += "-"
             i -= 1
 
-        elif i > 0 and score_matrix[i][j] == seq2_gaps_matrix[i][j]:
+        else:
             aligned_seq1 += "-"
             aligned_seq2 += seq2[j - 1]
             j -= 1
@@ -42,29 +42,33 @@ def needleman_wunsch(seq1, seq2):
     n = len(seq1)
     m = len(seq2)
 
-    score_matrix = np.zeros((n + 1, m + 1))  # Matrix for scores
-    P = np.zeros((n + 1, m + 1))  # Matrix for gap penalties in seq1
-    Q = np.zeros((n + 1, m + 1))  # Matrix for gap penalties in seq2
+    score_matrix = np.zeros((n + 1, m + 1))
+    seq1_gaps_matrix = np.zeros((n + 1, m + 1))
+    seq2_gaps_matrix = np.zeros((n + 1, m + 1))
 
     for i in range(1, n + 1):
-        Q[i][0] = -999
-        score_matrix[i][0] = GAP_OPEN_PENALTY + i*GAP_EXTEND_PENALTY
+        seq1_gaps_matrix[i][0] = float('-INF')
+        score_matrix[i][0] = seq1_gaps_matrix[i][0]
 
     for j in range(1, m + 1):
-        P[0][j] = -999
-        score_matrix[0][j] = GAP_OPEN_PENALTY + j*GAP_EXTEND_PENALTY
+        seq2_gaps_matrix[0][j] = float('-INF')
+        score_matrix[0][j] = seq2_gaps_matrix[0][j]
 
     for i in range(1, n + 1):
         for j in range(1, m + 1):
             score_match = score_matrix[i - 1][j - 1] + (MATCH if seq1[i - 1] == seq2[j - 1] else MISMATCH)
-            P[i][j] = max(P[i - 1][j] + GAP_EXTEND_PENALTY, score_matrix[i - 1][j] + GAP_OPEN_PENALTY + GAP_EXTEND_PENALTY)
-            Q[i][j] = max(Q[i][j - 1] + GAP_EXTEND_PENALTY, score_matrix[i][j - 1] + GAP_OPEN_PENALTY + GAP_EXTEND_PENALTY)
-            score_matrix[i][j] = max(score_match, P[i][j], Q[i][j])
+            seq1_gaps_matrix[i][j] = max(seq1_gaps_matrix[i - 1][j] + GAP_EXTEND_PENALTY, score_matrix[i - 1][j] + GAP_OPEN_PENALTY)
+            seq2_gaps_matrix[i][j] = max(seq2_gaps_matrix[i][j - 1] + GAP_EXTEND_PENALTY, score_matrix[i][j - 1] + GAP_OPEN_PENALTY)
+            score_matrix[i][j] = max(score_match, seq1_gaps_matrix[i][j], seq2_gaps_matrix[i][j])
 
-    # return score_matrix, P,Q 
-    return traceback(seq1, seq2, score_matrix, P, Q)
-
-# print(needleman_wunsch("CATGCATCGAC", "GCATGCCAT"))
-print(needleman_wunsch("CG", "CCGA"))
+    return traceback(seq1, seq2, score_matrix, seq1_gaps_matrix, seq2_gaps_matrix)
 
 
+def alignment_with_prints(seq1, seq2):
+    alignments = needleman_wunsch("GCATGCCAT", "CATGCATCGAC")
+    print("for: '" + seq1 + "' and: '" + seq2 + "'")
+    print("got: '" + alignments[0] + "' and: '" + alignments[1] + "'")
+    return alignments
+
+
+alignment_with_prints("GCATGCCAT", "CATGCATCGAC")
