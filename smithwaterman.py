@@ -89,3 +89,5 @@ def smith_waterman(seq1, seq2):
         print(row)  # optional: see matrix
 
     return traceback_sw(score_matrix, seq1, seq2)
+
+print(smith_waterman('CG', 'GCATGCG'))
