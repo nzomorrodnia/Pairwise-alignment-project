@@ -1,5 +1,5 @@
 import numpy as np
-
+import textwrap as tw
 
 ##################################################################################
 ###################### 1. READING AND HANDLING FASTA FILES ##########################
@@ -99,16 +99,17 @@ sequence_type(sequences, user_input)
 
 
 ##################################################################################
-####################### 2. Needleman-Wunsch global alignment ###########################
+####################### 2. Needleman-Wunsch global alignment #####################
 ##################################################################################
 
 # Constants for scoring
-MATCH = 2
+MATCH = 1
 MISMATCH = -1
-GAP_OPEN = -3
+GAP_OPEN = -2
 GAP_EXTEND = -1
 
 def get_matrices(n, m):
+    '''Initializes matrices'''
     S = np.zeros((n + 1, m + 1))
     P = np.zeros((n + 1, m + 1))
     Q = np.zeros((n + 1, m + 1))
@@ -128,11 +129,13 @@ def get_matrices(n, m):
 
 
 def traceback(seq1, seq2, S, P, Q, i, j, current_alignment, alignments, matrix_to_use):
+    '''Backtracking through the three matrices. The function will decide which matrix to use 
+    based on the available paths for the current matrix and call itself until 'i' and 'j' are 0,
+    and then append current path to a list'''
     if i == 0 and j == 0:
         alignments.append(current_alignment)
         return
 
-    '''Issue when only one of either i or j is 0 - try using != instead'''
     if matrix_to_use == 'S':
         score = S[i][j]
         if i > 0 and j > 0 and S[i - 1][j - 1] + (MATCH if seq1[i - 1] == seq2[j - 1] else MISMATCH) == score:
@@ -166,6 +169,7 @@ def traceback(seq1, seq2, S, P, Q, i, j, current_alignment, alignments, matrix_t
 
 
 def all_reversed_and_no_dupes(alignments):
+    '''Takes the aligned strings and reverses them'''
     alignments_rev = []
     for alignment in alignments:
         l_seq1 = list(alignment[0])
@@ -178,9 +182,12 @@ def all_reversed_and_no_dupes(alignments):
 
 
 def needleman_wunsch(seq1, seq2):
+    '''Main alignment function. Fills initialized matrices from get_matrices(), calls
+    traceback() and sends output to all_reversed_and_no_dupes()'''
     n, m = len(seq1), len(seq2)
     S, P, Q = get_matrices(n, m)
 
+    # Filling initialized matrices based on applied scoring rules
     for i in range(1, n+1):
         for j in range(1, m+1):
             match_score = MATCH if seq1[i - 1] == seq2[j - 1] else MISMATCH
@@ -188,7 +195,7 @@ def needleman_wunsch(seq1, seq2):
             Q[i][j] = max(S[i][j-1] + GAP_OPEN + GAP_EXTEND, Q[i][j - 1] + GAP_EXTEND)
             S[i][j] = max(S[i-1][j-1] + match_score, P[i][j], Q[i][j])
 
-
+    # Traceback starting point
     max_score = max(S[n][m], P[n][m], Q[n][m])
     alignments = []
     if S[n][m] == max_score:
@@ -197,28 +204,62 @@ def needleman_wunsch(seq1, seq2):
         traceback(seq1, seq2, S, P, Q, n, m, ('', ''), alignments, 'P')
     if Q[n][m] == max_score:
         traceback(seq1, seq2, S, P, Q, n, m, ('', ''), alignments, 'Q')
-    
-    for row in S:
-        print(row)
-    for row in P:
-        print(row)
-    for row in Q:
-        print(row)
 
     return all_reversed_and_no_dupes(alignments)
 
 
 def alignment_with_prints(seq1, seq2):
     '''Prints alignments from previous outputs'''
-    alignments = needleman_wunsch(seq1, seq2)
-    print("for: \n    '" + seq1 + "' and: '" + seq2 + "'")
-    alignments_as_str = ""
-    for alignment in alignments:
-        alignments_as_str = alignments_as_str + "    as first sequence: '" + str(alignment[0]) + "', as second sequence: '" + str(alignment[1]) + "'\n"
-    print("got: \n" + alignments_as_str)
-    return alignments
+    raw_alignments = needleman_wunsch(seq1, seq2)
+    
+    # The function output will be processed to be properly displayed on screen
+    result_list = list()
+    sep = 40    # Separator for screen output
 
-# A, B = read_fasta('Pairwise-alignment-project\\tests\\test_fasta')
+    for res in raw_alignments:
+        # Collecting symbols to display
+        symbols = ""
+        for n in range(len(res[0])):
+            if res[0][n] == res[1][n]:
+                symbols += "|"
+            elif res[0][n] == '-':
+                symbols += ' '
+            elif res[1][n] == '-':
+                symbols += ' '
+            else:
+                symbols += '*' 
+        
+        # Wrapping the two aligned sequences and its symbols to fit the screen
+        wp_res0 = tw.wrap(res[0], width=sep)
+        wp_res1 = tw.wrap(res[1], width=sep)
+        symbols = tw.wrap(symbols, width=sep)
+
+        # Collecting sequence positions for each sequence    
+        seq1_posmarks = [(pos := pos + sep - wp_res0[n - 1].count('-') if n > 0 else 1) for n in range(len(res[0]) // sep + 1)]
+        seq2_posmarks = [(pos := pos + sep - wp_res1[n - 1].count('-') if n > 0 else 1) for n in range(len(res[1]) // sep + 1)]
+
+        # Collecting all data in a dictionary for systematic accessing
+        result = {
+            'seq1_ALIGNED': {'slices':wp_res0,'slice_lengths':seq1_posmarks},
+            'seq2_ALIGNED': {'slices':wp_res1,'slice_lengths':seq2_posmarks},
+            'sym_list': symbols
+        }
+        result_list.append(result)
+
+    # Final print statement
+    print(f"for:\n\n{ seq1}\n\nand:\n\n{seq2}\n\ngot:\n")
+    for result in result_list: 
+        fragments_to_display = result['seq1_ALIGNED']['slices']
+        for n in range(len(fragments_to_display)):
+            print(f'{result['seq1_ALIGNED']['slice_lengths'][n]}\t'
+                  f'{result['seq1_ALIGNED']['slices'][n]}'
+                  f'\n\t{result['sym_list'][n]}'
+                  f'\n{result['seq2_ALIGNED']['slice_lengths'][n]}'
+                  f'\t{result['seq2_ALIGNED']['slices'][n]}\n')
+        print('---------------------------------')
+    
+    print(f'Finished, {len(raw_alignments)} possible alignments found')
+
+
+
 alignment_with_prints(seq1,seq2)
-# alignment_with_prints("CG", "CCGA")
-# alignment_with_prints("GATTACA", "CATGCATCGAC")

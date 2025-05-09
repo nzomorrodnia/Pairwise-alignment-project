@@ -1,7 +1,7 @@
 # TO DO:
 
 1. Add position numbers for the output for the Smith Waterman algorithm (Nina)
-2. Add position numbers for the output for the Needleman-Wunch algorithm (Tomás)
+2. Add position numbers for the output for the Needleman-Wunch algorithm (Tomás) (DONE)
 3. Add user input to choose which kind of alignment to use (global or local)
 4. Make sure that all code is clean and has been properly commented (Nina and Tomás)
 5. Add Big O notation (either in code or in report, methods section)
@@ -16,7 +16,8 @@
    10.1: Needleman-Wunch algorithm with using both protein sequence and DNA sequence
    10.2: Smith-Waterman algorithm with using both protein and DNA
 11. Write conclusion
-12. Read through all requirements for the project and make sure we meet them all. 
-13. Gather script and report and submit.
+12. Read through all requirements for the project and make sure we meet them all.
+13. SIGN PROJECT AGREEMENT 
+14. Gather script and report and submit.
 
 OPTIONAL: Add: if the user wants to use BLOSUM
