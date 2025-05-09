@@ -1,5 +1,8 @@
+#!/home/tgc/anaconda3/bin/python3
+
 import numpy as np
 import textwrap as tw
+import sys 
 
 ##################################################################################
 ###################### 1. READING AND HANDLING FASTA FILES ##########################
@@ -7,22 +10,27 @@ import textwrap as tw
 
 def read_fasta(file):
     '''Reads a FASTA file and returns the sequences as strings in a list.'''
-    sequences = [] # empty list to store sequences
-    with open(file, 'r') as file:
-        seq = "" # empty string
-        for line in file: # read line by line
-            if line.startswith('>'): # if it's a header line
-                if seq: # if there's a sequence already
-                    sequences.append(seq) # append to list
-                seq = ""
-            else: # if not a header line
-                seq += line.strip().upper() # remove whitespace and convert to uppercase
-        if seq: # if there's a sequence left at the end
-            sequences.append(seq) # append the last sequence
+    try:
+        sequences = [] # empty list to store sequences
+        with open(file, 'r') as file:
+            seq = "" # empty string
+            for line in file: # read line by line
+                if line.startswith('>'): # if it's a header line
+                    if seq: # if there's a sequence already
+                        sequences.append(seq) # append to list
+                    seq = ""
+                else: # if not a header line
+                    seq += line.strip().upper() # remove whitespace and convert to uppercase
+            if seq: # if there's a sequence left at the end
+                sequences.append(seq) # append the last sequence
 
-    if len(sequences) != 2:
-        raise ValueError("FASTA file must contain exactly two sequences.")
-    return sequences[0], sequences[1] # return the two sequences
+        if len(sequences) != 2:
+            raise ValueError("FASTA file must contain exactly two sequences.")
+        return sequences[0], sequences[1] # return the two sequences
+    except IOError as error:
+        return f"Could not open file because: {error}"
+
+
 
 def is_dna(sequences):
     '''Checks if the sequences are DNA.'''
@@ -80,7 +88,9 @@ user_input = get_sequence_type_from_user()
 print(f"The user specified the sequences as: {user_input}")
 
 # Reading the sequences from the FASTA file
-seq1, seq2 = read_fasta('Pairwise-alignment-project\\tests\\test_fasta') # unpacking the sequences
+print(sys.argv[1])
+seq1, seq2 = read_fasta(sys.argv[1]) # unpacking the sequences
+
 
 print("Sequence 1:", seq1)
 print("Sequence 2:", seq2)
@@ -251,11 +261,11 @@ def alignment_with_prints(seq1, seq2):
     for result in result_list: 
         fragments_to_display = result['seq1_ALIGNED']['slices']
         for n in range(len(fragments_to_display)):
-            print(f'{result['seq1_ALIGNED']['slice_lengths'][n]}\t'
-                  f'{result['seq1_ALIGNED']['slices'][n]}'
-                  f'\n\t{result['sym_list'][n]}'
-                  f'\n{result['seq2_ALIGNED']['slice_lengths'][n]}'
-                  f'\t{result['seq2_ALIGNED']['slices'][n]}\n')
+            print(f"{result['seq1_ALIGNED']['slice_lengths'][n]}\t"
+                  f"{result['seq1_ALIGNED']['slices'][n]}"
+                  f"\n\t{result['sym_list'][n]}"
+                  f"\n{result['seq2_ALIGNED']['slice_lengths'][n]}"
+                  f"\t{result['seq2_ALIGNED']['slices'][n]}\n")
         print('---------------------------------')
     
     print(f'Finished, {len(raw_alignments)} possible alignments found')

@@ -3,9 +3,9 @@
 1. Add position numbers for the output for the Smith Waterman algorithm (Nina)
 2. Add position numbers for the output for the Needleman-Wunch algorithm (Tomás) (DONE)
 3. Add user input to choose which kind of alignment to use (global or local)
-4. Make sure that all code is clean and has been properly commented (Nina and Tomás)
+4. Make sure that all code is clean and has been properly commented (Nina and Tomás) (DONE for NW) 
 5. Add Big O notation (either in code or in report, methods section)
-6. Add UNIX commands for user to call the script from UNIX command line
+6. Add UNIX commands for user to call the script from UNIX command line (DONE for NW)
 7. Collect all scripts in one python file (one of us when we're done with everything)
 8. Insert references to the introduction and theory sections (Tomás?)
 9. Write method section in pseudo code (use package in overleaf):
