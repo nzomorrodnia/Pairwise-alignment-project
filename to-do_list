@@ -7,13 +7,13 @@
 5. Add Big O notation (either in code or in report, methods section) (DONE)
 6. Add UNIX commands for user to call the script from UNIX command line (DONE for NW)
 7. Collect all scripts in one python file (one of us when we're done with everything)
-8. Insert references to the introduction and theory sections (Tomás?)
+8. Insert references to the introduction and theory sections (DONE)
 9. Write method section in pseudo code (use package in overleaf):
    9.1: About FASTA handling and Smith Waterman (Nina)
-   9.2: About Needleman-Wunch (Tomás)
+   9.2: About Needleman-Wunch (Tomás) (DONE)
    9.3: About all user inputs etc.
 10. Write results section with screenshots of output from:
-   10.1: Needleman-Wunch algorithm with using both protein sequence and DNA sequence
+   10.1: Needleman-Wunch algorithm with using both protein sequence and DNA sequence (DONE)
    10.2: Smith-Waterman algorithm with using both protein and DNA
 11. Write conclusion
 12. Read through all requirements for the project and make sure we meet them all.
