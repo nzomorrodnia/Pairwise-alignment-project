@@ -88,7 +88,7 @@ user_input = get_sequence_type_from_user()
 print(f"The user specified the sequences as: {user_input}")
 
 # Reading the sequences from the FASTA file
-seq1, seq2 = read_fasta(fr'Pairwise-alignment-project\tests\test_fasta') # unpacking the sequences
+seq1, seq2 = read_fasta(fr'{sys.argv[1]}') # unpacking the sequences
 
 
 print("Sequence 1:", seq1)
@@ -280,6 +280,7 @@ def alignment_with_prints(seq1, seq2):
             'sym_list': symbols
         }
         result_list.append(result)
+
 
     # Final print statement
     print(f"for:\n\n{ seq1}\n\nand:\n\n{seq2}\n\ngot:\n")
