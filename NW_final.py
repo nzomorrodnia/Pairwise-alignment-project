@@ -88,8 +88,7 @@ user_input = get_sequence_type_from_user()
 print(f"The user specified the sequences as: {user_input}")
 
 # Reading the sequences from the FASTA file
-print(sys.argv[1])
-seq1, seq2 = read_fasta(sys.argv[1]) # unpacking the sequences
+seq1, seq2 = read_fasta(fr'Pairwise-alignment-project\tests\test_fasta') # unpacking the sequences
 
 
 print("Sequence 1:", seq1)
@@ -99,7 +98,6 @@ sequences = [seq1, seq2] # Grouping the sequences into a list
 
 # Checking if the sequences are of the same type as the user declared
 sequence_type(sequences, user_input)
-
 
 ##################################################################################
 ############################## END OF FASTA HANDLING #############################
@@ -115,8 +113,35 @@ sequence_type(sequences, user_input)
 # Constants for scoring
 MATCH = 1
 MISMATCH = -1
-GAP_OPEN = -2
+GAP_OPEN = -10
 GAP_EXTEND = -1
+
+# Setting custom score parameters
+custom_constants = input('Do you want custom score parameters? Type Y if "Yes":\n').lower()
+if custom_constants == 'y':
+    terminate = False
+    while not terminate:
+        try:
+            MATCH, MISMATCH, GAP_OPEN, GAP_EXTEND = (map(int, user_constants:=input('Please input MATCH, MISMATCH, GAP_OPEN and GAP_EXTEND as integers separated by spaces, otherwise type ENTER for default parameters:\n').split()))
+            if GAP_EXTEND < GAP_OPEN:
+                print('Gap extension cannot be more negative than gap opening')
+                continue
+            if MATCH < 0:
+                print('Match must be non-negative')
+                continue
+            if MISMATCH > 0:
+                print('Mismatch must be zero or negative')
+                continue
+            terminate = True
+        except ValueError:
+            if not bool(user_constants):
+                terminate = True
+                break
+            else:
+                print('Please enter exactly four integers')
+                print(user_constants)
+                continue
+
 
 def get_matrices(n, m):
     '''Initializes matrices'''
@@ -268,7 +293,8 @@ def alignment_with_prints(seq1, seq2):
                   f"\t{result['seq2_ALIGNED']['slices'][n]}\n")
         print('---------------------------------')
     
-    print(f'Finished, {len(raw_alignments)} possible alignments found')
+    print(f'Finished, {len(raw_alignments)} possible alignments found.Scores used:\n'
+          f'Match = {MATCH}, Mismatch = {MISMATCH}, Gap opening = {GAP_OPEN}, Gap extension = {GAP_EXTEND}')
 
 
 
