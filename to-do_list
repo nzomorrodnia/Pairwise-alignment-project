@@ -1,8 +1,8 @@
 # TO DO:
 
-1. Add position numbers for the output for the Smith Waterman algorithm (Nina)
+1. Add position numbers for the output for the Smith Waterman algorithm (Nina) (DONE)
 2. Add position numbers for the output for the Needleman-Wunch algorithm (Tomás) (DONE)
-3. Add user input to choose which kind of alignment to use (global or local)
+3. Add user input to choose which kind of alignment to use (global or local) (DONE)
 4. Make sure that all code is clean and has been properly commented (Nina and Tomás) (DONE for NW) 
 5. Add Big O notation (either in code or in report, methods section) (DONE)
 6. Add UNIX commands for user to call the script from UNIX command line (DONE for NW)
