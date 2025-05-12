@@ -14,10 +14,10 @@
    9.3: About all user inputs etc.
 10. Write results section with screenshots of output from:
    10.1: Needleman-Wunch algorithm with using both protein sequence and DNA sequence (DONE)
-   10.2: Smith-Waterman algorithm with using both protein and DNA
-11. Write conclusion
+   10.2: Smith-Waterman algorithm with using both protein and DNA (DONE)
+11. Write conclusion (DONE)
 12. Read through all requirements for the project and make sure we meet them all.
-13. SIGN PROJECT AGREEMENT 
+13. SIGN PROJECT AGREEMENT (DONE)
 14. Gather script and report and submit.
 
 OPTIONAL: Add: if the user wants to use BLOSUM
